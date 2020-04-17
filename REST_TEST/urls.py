@@ -4,8 +4,8 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register("vik", views.HelloWorldSETS, basename='viktor')
-
 router.register('profile', views.UserProfileViewSet)
+router.register('login', views.LoginViewSet, basename='login')
 
 
 
