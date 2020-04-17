@@ -2,10 +2,14 @@ from django.shortcuts import render
 from rest_framework import request, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.authentication import TokenAuthentication
+
 
 from rest_framework import viewsets
 
-from .serializers import HelloSerializer
+from .serializers import *
+from .models import *
+from .permissions import UpdateOwnProfile
 
 
 class HellowWORLD(APIView):
@@ -80,3 +84,11 @@ class HelloWorldSETS(viewsets.ViewSet):
 
     def destroy(self, request, pk=None):
         return Response({"http_method": "delete"})
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+
+    serializer_class = UserProfileSerializer
+    queryset = UserProfile.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (UpdateOwnProfile,)
