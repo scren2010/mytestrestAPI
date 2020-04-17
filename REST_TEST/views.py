@@ -45,6 +45,10 @@ class HellowWORLD(APIView):
 
 
 class HelloWorldSETS(viewsets.ViewSet):
+
+
+    serializer_class = HelloSerializer
+    
     def list(self, request):
 
         a = [
@@ -52,4 +56,27 @@ class HelloWorldSETS(viewsets.ViewSet):
             "Why do we use it? It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
         ]
         return Response({"method":  'Dsktnb туда не знаю куда', 'a': a })
+    def create(self, request):
+        serializer = HelloSerializer(data=request.data)
+
+        if serializer.is_valid():
+            name = serializer.data.get('name')
+            message = 'Hello {0}'.format(name)
+            return Response({"message": message})
+        else: return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, pk=None):
+
+        return Response({"http_method": "GET"})
+    
+    def update(self, request, pk=None):
+
+        return Response({"http_method": "PUT"})
+
+    def partial_update(self, request, pk=None):
         
+        return Response({"http_method": "PATCH"})
+
+
+    def destroy(self, request, pk=None):
+        return Response({"http_method": "delete"})
