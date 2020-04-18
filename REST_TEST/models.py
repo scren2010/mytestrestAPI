@@ -32,6 +32,8 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField("Mail: ", max_length=254, unique=True)
     name = models.CharField('Имя: ', max_length=255)
+    balance = models.BigIntegerField('Заработано денег: ', default=0)
+    all_time_balance = models.BigIntegerField('Баланс за всё время: ', default=0)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
 
@@ -50,9 +52,10 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-class ProfileFeedItem(models.Model):
+class Expenses(models.Model):
     user_profile = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
-    starus_text = models.CharField(max_length=255)
+    waste = models.BigIntegerField('Вычет: ', default=0)
+    waste_desc = models.TextField('На что тебе этот рубль? ', max_length=255)
     created_on = models.DateTimeField(auto_now_add=True) 
 
     def __str__(self):

@@ -4,4 +4,4 @@ from .models import *
 
 
 admin.site.register(UserProfile)
-admin.site.register(ProfileFeedItem)
+admin.site.register(Expenses)

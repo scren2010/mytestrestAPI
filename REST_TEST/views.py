@@ -9,10 +9,43 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 
-
 from .models import *
-from .permissions import UpdateOwnProfile, PostOwnStatus
+from .permissions import *
 from .serializers import *
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+
+    serializer_class = UserProfileSerializer
+    queryset = UserProfile.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (UpdateOwnProfile,)
+
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'email',)
+
+
+class LoginViewSet(viewsets.ViewSet):
+    serializer_class = AuthTokenSerializer
+    def create(self, request):
+        return ObtainAuthToken().post(request)
+
+
+class ExpensesViewSet(viewsets.ModelViewSet):
+    
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = ExpensesSerializer
+    queryset = Expenses.objects.all()
+    permission_classes = (PostOwnStatus, IsAuthenticated)
+
+    def perform_create(self, serializer):
+
+        serializer.save(user_profile=self.request.user)
+    
+
+
+
+# -----------------------------------------------------------------------------
 
 
 class HellowWORLD(APIView):
@@ -87,34 +120,3 @@ class HelloWorldSETS(viewsets.ViewSet):
 
     def destroy(self, request, pk=None):
         return Response({"http_method": "delete"})
-
-
-class UserProfileViewSet(viewsets.ModelViewSet):
-
-    serializer_class = UserProfileSerializer
-    queryset = UserProfile.objects.all()
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (UpdateOwnProfile,)
-
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('name', 'email',)
-
-class LoginViewSet(viewsets.ViewSet):
-    
-    serializer_class = AuthTokenSerializer
-
-    def create(self, request):
-
-        return ObtainAuthToken().post(request)
-
-class UserProfileFeedViewSet(viewsets.ModelViewSet):
-    
-    authentication_classes = (TokenAuthentication,)
-    serializer_class = ProfileFeedItemSerializer
-    queryset = ProfileFeedItem.objects.all()
-    permission_classes = (PostOwnStatus, IsAuthenticated)
-
-    def perform_create(self, serializer):
-
-        serializer.save(user_profile=self.request.user)
-    

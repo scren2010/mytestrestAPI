@@ -9,8 +9,8 @@ class HelloSerializer(serializers.Serializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('id', 'email', 'name', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ('name', 'email', 'balance', 'all_time_balance', 'id', 'password')
+        extra_kwargs = {'password': {'write_only': True}, 'all_time_balance': {'read_only': True}}
 
     def create(self, validated_data):
         user = UserProfile(
@@ -22,8 +22,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-class ProfileFeedItemSerializer(serializers.ModelSerializer):
+class ExpensesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProfileFeedItem
-        fields = ('id', 'user_profile', 'starus_text', 'created_on')
+        model = Expenses
+        fields = ('id', 'user_profile', 'created_on', 'waste', 'waste_desc')
         extra_kwargs = {'user_profile': {'read_only': True}}

@@ -6,7 +6,7 @@ router = DefaultRouter()
 router.register("vik", views.HelloWorldSETS, basename='viktor')
 router.register('profile', views.UserProfileViewSet)
 router.register('login', views.LoginViewSet, basename='login')
-router.register('feed', views.UserProfileFeedViewSet)
+router.register('expenses', views.ExpensesViewSet)
 
 
 urlpatterns = [
