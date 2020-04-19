@@ -5,3 +5,4 @@ from .models import *
 
 admin.site.register(UserProfile)
 admin.site.register(Expenses)
+admin.site.register(Income)

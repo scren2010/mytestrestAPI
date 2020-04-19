@@ -7,6 +7,7 @@ router.register("vik", views.HelloWorldSETS, basename='viktor')
 router.register('profile', views.UserProfileViewSet)
 router.register('login', views.LoginViewSet, basename='login')
 router.register('expenses', views.ExpensesViewSet)
+router.register('zarplata', views.IncomeViewSet)
 
 
 urlpatterns = [
