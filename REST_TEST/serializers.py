@@ -31,4 +31,4 @@ class ExpensesSerializer(serializers.ModelSerializer):
 class IncomeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Income
-        fields = ('id', 'user_profile', 'balance')
+        fields = ('id', 'user_profile', 'balance' )

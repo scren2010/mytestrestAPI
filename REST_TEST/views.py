@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import filters, request, status, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -7,7 +7,6 @@ from rest_framework.decorators import authentication_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-
 
 from .models import *
 from .permissions import *
@@ -50,7 +49,7 @@ class IncomeViewSet(viewsets.ModelViewSet):
     serializer_class = IncomeSerializer
     queryset = Income.objects.all()
     permission_classes = (PostOwnStatus, IsAuthenticated)
-    # lookup_field = 'pk'
+    lookup_field = 'pk'
     # pagination_class = Pagination
     # filters_backends = [filters.SearchFilter]
     # search_fields = ('first_name', 'last_name', 'count')
@@ -59,12 +58,19 @@ class IncomeViewSet(viewsets.ModelViewSet):
         instance = self.get_serializer(data=request.data)
         instance.is_valid(raise_exception=True)
         self.perform_create(instance)
-        stock = UserProfile.objects.first()
+        imalo = self.request.data['user_profile']
+        print(imalo)
+        stock = UserProfile.objects.get(pk=imalo)
         stock.all_time_balance += int(request.data['balance'])
         stock.balance += int(request.data['balance'])
         stock.save()
         return Response(instance.data, status=status.HTTP_201_CREATED)
 
+        # if request.method == "POST":
+        #     tom = UserProfile()
+        #     tom.name = request.POST.get("user_profile")
+        #     return tom
+        # ide = tom0
 
         # bal = UserProfile.objects.get('balance')
         # # bal += int(request.data['balance'])
